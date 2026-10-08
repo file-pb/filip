@@ -1,0 +1,127 @@
+name: build-deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      obnova:
+        description: "Nasadit i když nejde přečíst, co na produkci běží"
+        type: boolean
+        default: false
+
+# Záměrně BEZ cizích akcí kromě checkoutu: přihlášení a build zvládne
+# docker CLI, který na runneru je. Co nepřidám, to nemusím připínat na SHA
+# ani hlídat. Checkout je připnutý na commit, ne na značku.
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/filip
+  ADRESA: https://filip.klihovka.cz
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Přihlásit se do GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      # Build sám ověřuje typy, takže chybějící překlad spadne tady.
+      - name: Postavit image
+        working-directory: web
+        run: |
+          docker build \
+            --build-arg "VERZE=${{ github.sha }}" \
+            --build-arg "ZAKLADNI_URL=${{ env.ADRESA }}" \
+            -f Dockerfile \
+            -t "${{ env.IMAGE }}:${{ github.sha }}" \
+            -t "${{ env.IMAGE }}:latest" \
+            ..
+
+      - name: Odeslat image
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          docker push "${{ env.IMAGE }}:${{ github.sha }}"
+          docker push "${{ env.IMAGE }}:latest"
+
+  nasazeni:
+    needs: build
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: nasazeni-filip
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Celá historie: bez ní nejde říct, jestli je běžící commit
+          # potomkem toho nasazovaného.
+          fetch-depth: 0
+
+      # Tenhle krok sám nepadá (`|| true`) — rozhodnutí patří kroku pod ním.
+      - name: Co běží na produkci
+        id: bezi
+        run: |
+          sha=$(curl -fsS --max-time 20 "${{ env.ADRESA }}/verze" 2>/dev/null \
+            | python3 -c "import json,sys; print(json.load(sys.stdin).get('verze',''))" 2>/dev/null || true)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Na produkci běží: ${sha:-neznámá}"
+
+      # Jádro ochrany: nasazovaný commit nesmí být předkem toho běžícího.
+      # Opsáno z poháru, protože tam to vzniklo a platí to stejně — nečitelná
+      # verze ochranu neobchází, jinak by stačil výpadek /verze k tomu, aby
+      # starý build přepsal produkci.
+      - name: Nevracet produkci do minulosti
+        id: kontrola
+        run: |
+          bezi='${{ steps.bezi.outputs.sha }}'
+          obnova='${{ inputs.obnova }}'
+          if [ -z "$bezi" ] || ! git cat-file -e "$bezi^{commit}" 2>/dev/null; then
+            duvod="Nedá se přečíst, co na produkci běží"
+            [ -n "$bezi" ] && duvod="Produkce hlásí verzi $bezi, která v historii není"
+            if [ "$obnova" = "true" ]; then
+              echo "::warning::$duvod. Běží režim obnovy, nasazuje se."
+              echo "nasadit=ano" >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            echo "::error::$duvod, takže nejde ověřit, že tenhle build není starší."
+            echo "Spusť build-deploy ručně nad main s volbou obnova, pokud to tak má být."
+            exit 1
+          fi
+          if [ "$bezi" = "${{ github.sha }}" ]; then
+            echo "Na produkci už běží tenhle commit, nasazuje se znovu."
+            echo "nasadit=ano" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if git merge-base --is-ancestor "${{ github.sha }}" "$bezi"; then
+            echo "::warning::Na produkci běží novější commit ($bezi). Přeskakuje se."
+            echo "nasadit=ne" >> "$GITHUB_OUTPUT"
+          else
+            echo "nasadit=ano" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Nasadit
+        if: ${{ steps.kontrola.outputs.nasadit == 'ano' }}
+        run: |
+          curl -fsS --max-time 120 -X POST "${{ vars.DEPLOY_WEBHOOK }}" \
+            -H "Authorization: Bearer ${{ secrets.DEPLOY_TOKEN }}" \
+            -H "Content-Type: application/x-yaml" \
+            --data-binary @deploy/docker-compose.yml
+
+      # Nasazení není hotové tím, že háček vrátil 200. Hotové je, až
+      # produkce hlásí commit, který se nasazoval.
+      - name: Ověřit, že běží nasazená verze
+        if: ${{ steps.kontrola.outputs.nasadit == 'ano' }}
+        run: |
+          for i in $(seq 1 30); do
+            sha=$(curl -fsS --max-time 10 "${{ env.ADRESA }}/verze" 2>/dev/null \
+              | python3 -c "import json,sys; print(json.load(sys.stdin).get('verze',''))" 2>/dev/null || true)
+            [ "$sha" = "${{ github.sha }}" ] && { echo "Běží ${{ github.sha }}"; exit 0; }
+            sleep 5
+          done
+          echo "::error::Produkce po nasazení nehlásí ${{ github.sha }}."
+          exit 1

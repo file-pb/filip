@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filip Burda</title>
+<!--
+  Záložní kořen. Na produkci sem nikdo nedojde — nginx vrátí 302 na /cs/
+  dřív (deploy/nginx/default.conf). Tenhle soubor je tu proto, aby export
+  fungoval i bez té konfigurace: u vývojového serveru, při otevření z disku
+  a kdyby to někdy servíroval někdo jiný. Přenositelnost je první kritérium
+  platformy, a kořen závislý na jednom konkrétním serveru by proti ní šel.
+
+  Meta refresh, ne JavaScript: funguje i bez něj. Canonical míří na /cs/,
+  aby tahle stránka nevznikla v indexu jako druhá verze téhož.
+-->
+<link rel="canonical" href="/cs/">
+<meta http-equiv="refresh" content="0; url=/cs/">
+<meta name="robots" content="noindex">
+<style>
+  body { font: 1rem/1.6 system-ui, sans-serif; margin: 3rem auto; max-width: 30rem; padding: 0 1rem; }
+  @media (prefers-color-scheme: dark) { body { background: #161513; color: #ece8e1; } a { color: #d99058; } }
+</style>
+</head>
+<body>
+<p><a href="/cs/">Česky</a> · <a href="/en/">English</a></p>
+</body>
+</html>

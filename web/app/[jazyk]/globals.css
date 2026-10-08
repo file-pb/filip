@@ -1,0 +1,144 @@
+/*
+ * Ručně psané CSS, bez frameworku — stejný způsob jako u poháru, ale
+ * vlastní paleta: je to jiná značka, ne tentýž web. Pohár má vodní modrou,
+ * tady je teplejší měděná.
+ *
+ * Žádné externí písmo. Systémové je okamžité, nepotřebuje druhý požadavek
+ * a na statické stránce by externí font byl jediná běhová závislost, co tu
+ * je — to by bylo proti smyslu celé věci.
+ */
+
+:root {
+  --pozadi: #fcfbf9;
+  --papir: #ffffff;
+  --text: #1b1a18;
+  --tlumeny: #615c55;
+  --linka: #e4e0d9;
+  --akcent: #a35a2a;
+  --zvyrazneni: #f4f0e9;
+  /* Šířka obsahu. Text se čte po řádcích, ne po plochách — širší sloupec
+     než ~62rem se očima špatně vrací na začátek řádku. */
+  --sirka: 44rem;
+}
+
+:root { color-scheme: light; }
+
+/*
+ * Tmavý režim má dvojici pravidel a **obě se musí držet stejné hodnoty**.
+ * První platí, když si ho vyžádá systém, druhá kdyby se někdy přidal
+ * ruční přepínač. Rozejdou-li se, projeví se to jen v jednom z těch
+ * dvou stavů — a to se hledá dlouho (u poháru stejná poznámka).
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-rezim="svetly"]) {
+    color-scheme: dark;
+    --pozadi: #161513;
+    --papir: #1d1c1a;
+    --text: #ecE8e1;
+    --tlumeny: #a39d94;
+    --linka: #302e2b;
+    --akcent: #d99058;
+    --zvyrazneni: #262420;
+  }
+}
+:root[data-rezim="tmavy"] {
+  color-scheme: dark;
+  --pozadi: #161513;
+  --papir: #1d1c1a;
+  --text: #ecE8e1;
+  --tlumeny: #a39d94;
+  --linka: #302e2b;
+  --akcent: #d99058;
+  --zvyrazneni: #262420;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* Pozadí výslovně, ne z dědičnosti: bez toho prosvítá bílá prohlížeče
+     a v tmavém režimu to bliká při načtení. */
+  background: var(--pozadi);
+  color: var(--text);
+  font: 1rem/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-wrap: pretty;
+}
+
+/* Okraj 1rem na telefonu, aby text nelepil na hranu displeje. */
+.obal {
+  max-width: var(--sirka);
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+a { color: var(--akcent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+.jazyky { text-align: right; font-size: 0.875rem; margin-bottom: 2rem; }
+
+h1 {
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem;
+}
+h2 {
+  font-size: 1.35rem;
+  margin: 3.25rem 0 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linka);
+}
+h3 { font-size: 1.05rem; margin: 2rem 0 0.5rem; }
+
+.podtitul {
+  font-size: 1.15rem;
+  color: var(--text);
+  margin: 0 0 1.5rem;
+}
+.hlava p { margin: 0 0 1rem; }
+
+p { margin: 0 0 1rem; }
+
+.doklady { list-style: none; padding: 0; margin: 0; }
+.doklady li {
+  background: var(--papir);
+  border: 1px solid var(--linka);
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.technologie { margin: 0; }
+.technologie div { margin-bottom: 1rem; }
+.technologie dt { font-weight: 600; display: inline; }
+/* Mezislovní mezera mezi <dt> a <dd>. V JSX mezi nimi žádný textový uzel
+   není, takže se u `display: inline` dotýkají — vypadalo to jako
+   „Fotbal.UEFA B Diploma". Nalezeno při vizuální kontrole 9. 10. 2026. */
+.technologie dd { display: inline; margin: 0 0 0 0.3em; }
+
+.projekt { margin-bottom: 2.5rem; }
+.projekt h3 { color: var(--akcent); }
+.odkaz { font-size: 0.95rem; }
+
+.zpusob { margin-bottom: 1.75rem; }
+.zpusob h3 { margin-bottom: 0.35rem; }
+
+.kontakt { background: var(--zvyrazneni); border-radius: 6px; padding: 0.25rem 1.25rem 1.25rem; }
+.kontakt h2 { border-top: 0; margin-top: 1.5rem; }
+
+/* Tlačítko, které se tváří jako odkaz. Je to <button>, takže obsluha
+   klávesnicí a čtečkou funguje bez dalšího zařizování. */
+.mail {
+  font: inherit;
+  color: var(--akcent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}

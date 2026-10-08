@@ -1,0 +1,41 @@
+# Nasazení osobní stránky. Jedna služba, žádná databáze, žádný stav.
+#
+# Jméno routeru je napsané NATVRDO (`filip`). Compose neinterpoluje
+# proměnné do klíčů labelů, takže `${APP_NAME}` by se tu neuplatnilo
+# a Traefik by vrátil svůj self-signed certifikát (poučení 10).
+#
+# Žádný bind mount: všechno je zapečené v image. Nasazovací háček beztak
+# odmítne mount mimo /opt/apps/<projekt>, takže tím se nic neztrácí.
+
+services:
+  web:
+    image: ${IMAGE}
+    restart: unless-stopped
+    networks: [edge]
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: edge
+      traefik.http.routers.filip.rule: Host(`${APP_NAME}.${PLATFORM_DOMAIN:?}`)
+      traefik.http.routers.filip.tls.certresolver: le
+      traefik.http.routers.filip.middlewares: "ratelimit-standard@file,bezpecne-hlavicky@file"
+      traefik.http.services.filip.loadbalancer.server.port: "8080"
+      # Kontrola zdraví s timeoutem VĚTŠÍM než 5 s. Krátký timeout udělal
+      # u poháru z přetížení výpadek: web odpovídal pomalu ale správně
+      # a Traefik ho vyřadil, takže všichni dostali 503 (poučení 44).
+      # U statiky je to málo pravděpodobné, ale pravidlo platí plošně.
+      traefik.http.services.filip.loadbalancer.healthcheck.path: /health/ready
+      traefik.http.services.filip.loadbalancer.healthcheck.interval: 10s
+      traefik.http.services.filip.loadbalancer.healthcheck.timeout: 10s
+    deploy:
+      resources:
+        # Jako rozcestník, ne jako šablona služby. nginx se statikou se do
+        # 64 MB vejde s rezervou a stroj má 3,8 GB skutečné paměti, přičemž
+        # součet limitů už je dnes vyšší — každých 448 MB se počítá.
+        limits: { memory: 64m, cpus: "0.5" }
+
+networks:
+  edge:
+    external: true
