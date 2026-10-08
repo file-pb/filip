@@ -109,7 +109,7 @@ jobs:
         if: ${{ steps.kontrola.outputs.nasadit == 'ano' }}
         run: |
           curl -fsS --max-time 120 -X POST "${{ vars.DEPLOY_WEBHOOK }}" \
-            -H "Authorization: Bearer ${{ secrets.DEPLOY_TOKEN }}" \
+            -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}" \
             -H "Content-Type: application/x-yaml" \
             --data-binary @deploy/docker-compose.yml
 
