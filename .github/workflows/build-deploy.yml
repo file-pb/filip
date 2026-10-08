@@ -31,16 +31,17 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
       # Build sám ověřuje typy, takže chybějící překlad spadne tady.
+      # Kontext je kořen repozitáře: obraz bere zdroj z web/ i konfiguraci
+      # nginxu z deploy/. Viz komentář v web/Dockerfile.
       - name: Postavit image
-        working-directory: web
         run: |
           docker build \
             --build-arg "VERZE=${{ github.sha }}" \
             --build-arg "ZAKLADNI_URL=${{ env.ADRESA }}" \
-            -f Dockerfile \
+            -f web/Dockerfile \
             -t "${{ env.IMAGE }}:${{ github.sha }}" \
             -t "${{ env.IMAGE }}:latest" \
-            ..
+            .
 
       - name: Odeslat image
         if: ${{ github.event_name != 'pull_request' }}

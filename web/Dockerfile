@@ -1,15 +1,22 @@
 # Web se staví ve dvou krocích: v prvním Next vyrobí statický export,
 # ve druhém zůstane jen nginx a hotové soubory. Žádný Node v běhu —
 # tahle stránka nic nepočítá, takže nemá co renderovat za běhu.
+#
+# POZOR na kontext: staví se z KOŘENE repozitáře, ne z web/.
+#   docker build -f web/Dockerfile -t filip .
+# Obraz potřebuje soubory z obou adresářů — zdroj z web/ a konfiguraci
+# nginxu z deploy/ — takže kontext musí obsáhnout oba. První build v CI
+# na tom spadl: cesty byly psané pro kontext web/ a `COPY package.json`
+# soubor nenašel (9. 10. 2026).
 
 FROM node:22-alpine AS build
 WORKDIR /src
 
 # Závislosti zvlášť, aby se vrstva nepřestavovala při každé změně textu.
-COPY package.json package-lock.json ./
+COPY web/package.json web/package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY web/ ./
 # Základ absolutních adres se zapéká při buildu: canonical, hreflang
 # a sitemap. Přechod na vlastní doménu je proto změna téhle proměnné
 # a nové nasazení — nikde v obsahu host není.

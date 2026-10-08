@@ -25,6 +25,13 @@ teprve nginx, ve vývojovém serveru tedy nefunguje.
 cd web && npm run build          # výstup v web/out/
 ```
 
+Obraz se staví **z kořene repozitáře**, ne z `web/` — potřebuje zdroj
+z `web/` i konfiguraci nginxu z `deploy/`:
+
+```bash
+docker build -f web/Dockerfile --build-arg VERZE=lokalni -t filip .
+```
+
 Build **musí spadnout**, když v jednom jazyce chybí pole — to je záměr.
 
 ## Než se to nasadí
