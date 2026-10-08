@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Filip Burda">
+  <!--
+    Ikona. Záměrně střídmá a bez písma z webu: v 16 px je čitelné jen
+    jedno písmeno, takže monogram „FB" by se slil. Barva je --akcent
+    ze stránky, napsaná natvrdo — SVG v <link rel="icon"> proměnné
+    stránky nevidí.
+    Je to zástupné řešení, dokud nepadne rozhodnutí o vizuální identitě;
+    nahradit ho znamená přepsat tenhle jeden soubor.
+  -->
+  <rect width="64" height="64" rx="14" fill="#a35a2a"/>
+  <path d="M22 17h22v8H31v8h11v8H31v14h-9z" fill="#fff"/>
+</svg>

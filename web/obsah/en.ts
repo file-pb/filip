@@ -170,8 +170,8 @@ export const en: Obsah = {
   kontakt: {
     nadpis: "Contact",
     mesto: "Příbram, Czechia",
-    mail: { uzivatel: "VYPLNIT", domena: "VYPLNIT" },
-    nahrada: "VYPLNIT [at] VYPLNIT",
+    mail: { uzivatel: "filipburda75", domena: "gmail.com" },
+    nahrada: "filipburda75 [at] gmail.com",
   },
 
   umi: [

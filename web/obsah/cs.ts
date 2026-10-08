@@ -168,9 +168,11 @@ export const cs: Obsah = {
     nadpis: "Kontakt",
     mesto: "Příbram",
     // Adresa je rozdělená schválně: v HTML se celá neobjeví a mailto se
-    // skládá až při kliknutí. Vyplnit podle rozhodnutí — viz README.
-    mail: { uzivatel: "VYPLNIT", domena: "VYPLNIT" },
-    nahrada: "VYPLNIT [zavináč] VYPLNIT",
+    // skládá až při kliknutí. Vyplněno 9. 10. 2026 podle kontaktu
+    // v Filipově vlastním CV, které poslal jako podklad pro tuhle stránku.
+    // Změna je jedna řádka tady a jedna v en.ts.
+    mail: { uzivatel: "filipburda75", domena: "gmail.com" },
+    nahrada: "filipburda75 [zavináč] gmail.com",
   },
 
   umi: [

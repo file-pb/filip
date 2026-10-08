@@ -43,8 +43,9 @@ Statický web na platformě „hračkárna“ (`klihovka.cz`). Adresa
 
 ## Co ještě není hotové
 
-- `web/obsah/*.ts`: `kontakt.mail` a `kontakt.nahrada` mají `VYPLNIT`.
-- Jména robotů v `web/app/robots.ts` ověřit proti dokumentaci
-  provozovatelů — mění se a špatně napsaný token mlčky nedělá nic.
+- **Vizuální identita.** `web/app/icon.svg` je zástupné řešení: měděný
+  čtverec s písmenem F. Nahradit ho znamená přepsat ten jeden soubor.
 - Otevřené obsahové otázky: PPC a e-marketing, úroveň angličtiny,
-  jmenování dalších minulých firem.
+  jmenování dalších minulých firem než Škoda-Auto.
+- Dohled v Uptime Kuma: řádka v `platform/scripts/kuma-setup.sh` je
+  připravená, skript se spouští ručně (chce heslo do skryté výzvy).

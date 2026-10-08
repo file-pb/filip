@@ -36,8 +36,9 @@ Build **musí spadnout**, když v jednom jazyce chybí pole — to je záměr.
 
 ## Než se to nasadí
 
-1. Vyplnit `kontakt.mail` a `kontakt.nahrada` v `web/obsah/cs.ts` a `en.ts`.
-2. Ověřit jména robotů v `web/app/robots.ts`.
+1. ~~Vyplnit kontakt~~ — hotovo 9. 10. 2026.
+2. ~~Ověřit jména robotů~~ — ověřeno 9. 10. 2026 u provozovatelů.
+   Jediný nedoložený je `Bytespider`, viz komentář v `app/robots.ts`.
 3. Na platformě: DNS, adresář v `/opt/apps/filip`, `.env` s `IMAGE`,
    `APP_NAME` a `PLATFORM_DOMAIN`. Pozor: `scripts/new-app.sh` dnes
    vyžaduje databázi, kterou tenhle projekt nemá — viz plán, fáze 2.
