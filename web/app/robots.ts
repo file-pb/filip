@@ -6,26 +6,35 @@ import { ZAKLAD } from "@/lib/jazyky";
  * pustit, tréninkové zakázat.** Blokovat všechno by šlo proti účelu téhle
  * stránky — hledání dnes často probíhá tak, že se někdo zeptá asistenta.
  *
- * Dvě ceny, které to má a o kterých víme:
- *  - `CCBot` buduje veřejný archiv webu, ne jen tréninková data;
- *  - `Amazonbot` není popsaný jako výhradně tréninkový.
+ * **Jména tokenů ověřena 9. 10. 2026 přímo v dokumentaci provozovatelů.**
+ * Co z toho vyšlo a co je potřeba vědět:
  *
- * A dvě věci, které tenhle soubor NEdělá:
- *  - `Google-Extended` vypne i grounding odpovědí v Gemini. Oddělený
- *    přepínač neexistuje, takže je to vědomá cena varianty B.
- *  - `Applebot-Extended` naopak řídí **jen trénink**; podklad pro odpovědi
- *    Apple řeší zvlášť (`nosnippet`).
+ * - `Google-Extended` řídí trénink **i grounding** odpovědí v Gemini
+ *   a Vertex AI. Google výslovně uvádí, že zařazení ani pořadí v Search
+ *   neovlivní. Oddělený přepínač pro ty dvě věci neexistuje — je to
+ *   vědomá cena varianty B.
+ * - `Applebot-Extended` naopak řídí **jen trénink** základních modelů,
+ *   **sám necrawluje** a v hodnocení Search se nebere. Použití obsahu jako
+ *   podkladu odpovědí řeší Apple zvlášť. Tady tedy nic neztrácíme.
+ * - `CCBot` buduje **veřejný archiv** webu pro výzkum, ne tréninkovou sadu.
+ *   Zákaz nás vyřadí i z těch ostatních použití. Vědomá cena.
+ * - `Amazonbot` slouží „ke zlepšování produktů a služeb“ a obsah **může**
+ *   být použit k tréninku — není to tedy čistě tréninkový robot.
+ * - `ChatGPT-User`, `Perplexity-User` a `Amzn-User` obsluhují dotaz
+ *   člověka, a provozovatelé u nich výslovně uvádějí, že `robots.txt`
+ *   nemusí platit. Jsou v povolených, takže na tom nezáleží.
+ * - `anthropic-ai` **v dokumentaci Anthropicu není** — byl to historický
+ *   údaj, proto tu není. Doložené jsou `ClaudeBot`, `Claude-User`
+ *   a `Claude-SearchBot`, všechny tři `robots.txt` respektují.
+ * - `OAI-AdsBot` existuje, ale chodí jen na stránky zadané jako reklama
+ *   v ChatGPT. Sem ho nepíšu, protože se sem nikdy nedostane.
+ * - **`Bytespider` se mi u provozovatele ověřit nepodařilo.** Tvar tokenu
+ *   je napříč zdroji shodný, ale dodržování `robots.txt` je sporné.
+ *   Nechávám ho v zákazu, protože zakázat token nic nestojí — jen se
+ *   na něj nespoléhám.
  *
- * `robots.txt` je doporučení, ne vynucení. Kdo ho nedodrží, toho zastaví
- * jedině Cloudflare před tímhle webem.
- *
- * **Jména tokenů ověřit proti dokumentaci provozovatelů** — mění se,
- * a špatně napsaný token mlčky nedělá nic.
- */
-/**
- * Při `output: "export"` musí metadata route výslovně říct, že je
- * statická — Next jinak build zastaví. Není to formalita: bez toho
- * by se robots generoval za běhu, který tady žádný není.
+ * `robots.txt` je vůbec doporučení, ne vynucení. Kdo ho nedodrží, toho
+ * zastaví jedině Cloudflare před tímhle webem.
  */
 export const dynamic = "force-static";
 
