@@ -36,6 +36,12 @@ ARG VERZE=neznama
 COPY --from=build /src/out /usr/share/nginx/html
 COPY deploy/nginx/default.conf /etc/nginx/conf.d/default.conf
 
+# Táž hodnota i v prostředí kontejneru (bod 7 kontraktu platformy): `/verze`
+# ji vydá jen tomu, kdo se zeptá přes HTTP, zatímco přehled platformy ji
+# čte z `docker inspect`, kde `ARG` po buildu nezůstane. Až za oběma `COPY`,
+# aby měnící se hodnota neshazovala jejich vrstvy z cache.
+ENV VERZE=$VERZE
+
 # /verze jako obyčejný soubor — nginx ho vydá a nic se nemusí šablonovat.
 RUN printf '{"verze":"%s"}\n' "$VERZE" > /usr/share/nginx/html/verze
 
