@@ -18,14 +18,14 @@ export const cs: Obsah = {
     "Vývojář .NET a C#. Programuju profesionálně od roku 2000, převážně na obchodních a finančních systémech.",
   uvod: [
     "Hardware a programování jsem měl vedle sebe od začátku: vystudoval jsem Střední průmyslovou školu v Písku, obor elektronická a sdělovací zařízení a programování logiky počítačů. Začínal jsem u elektronických zabezpečovacích a požárních systémů a kamer, takže zóny, poplachové stavy, falešné poplachy a napájení pro mě nejsou abstrakce.",
-    "Ve volném čase si stavím a provozuju vlastní platformu pro hobby projekty. Neběží na ní cvičná aplikace, ale veřejný web s dohledem, se zálohami, které ověřuju obnovou, a se zapsanými poučeními z poruch, na které jsem narazil.",
+    "Ve volném čase si stavím a provozuju vlastní platformu pro hobby projekty. Neběží na ní cvičná aplikace, ale veřejný web s dohledem, se zálohami, u kterých jsem obnovu zkoušel, a se zapsanými poučeními z poruch, na které jsem narazil.",
   ],
 
   cimSeZabyvam: {
     nadpis: "Čím se zabývám",
     odstavce: [
-      "Programuju profesionálně **od roku 2000**. Dráha nebyla přímá a to je na ní to užitečné: začínal jsem u podnikových a komunikačních systémů, přes ERP jsem se dostal k vedení týmu, pak několik let pracoval na kontrakt, mezi roky 2013 a 2017 jsem to dělal ve vlastní firmě jako jednatel a CTO, a od roku 2021 jsem zpátky v zaměstnaneckém poměru na obchodních a finančních systémech.",
-      "**Vedl jsem tým, ve špičce patnáctičlenný** — dva roky v roli Scrum mastera, čtyři roky jako CTO ve vlastní firmě. Těch patnáct je největší tým, který jsem vedl, ne velikost u obou rolí. Z té doby je i práce pro **Škoda-Auto**: architektura Azure pro jednotné přihlašování a modul, který páruje profily uživatele a prohlížeče napříč jejími komponentami.",
+      "Programuju profesionálně **od roku 2000**. Dráha nebyla přímá a to je na ní to užitečné: začínal jsem u podnikových a komunikačních systémů, přes ERP jsem se dostal k vedení týmu, pak několik let pracoval na kontrakt, potom ve vlastní firmě jako CTO, a od roku 2021 jsem zpátky v zaměstnaneckém poměru na obchodních a finančních systémech.",
+      "**Vedl jsem tým, ve špičce patnáctičlenný** — dva roky v roli Scrum mastera, čtyři roky jako CTO ve vlastní firmě. Těch patnáct je největší tým, který jsem vedl, ne velikost u obou rolí. Z té doby je i práce pro **Škoda Auto**: architektura Azure pro jednotné přihlašování.",
       "Vedle toho si od září 2026 stavím vlastní platformu, na které zkouším věci, na které se v práci nedostanu.",
       "**Kód na mých projektech vzniká s pomocí AI. Moje práce je zadání, oponentura, rozhodnutí a provoz.** Píšu to takhle přímo, protože je to podstatné: hodnota není v tom, kolik řádků jsem napsal, ale v tom, že ty systémy běží, mají ověřené zálohy a vím o nich, kde mají slabá místa — včetně toho, co ověřené ještě není.",
     ],
@@ -33,18 +33,18 @@ export const cs: Obsah = {
     doklady: [
       {
         nadpis: "Provoz, ne demo.",
-        text: "Platforma běží od září 2026. Web i jeho API odpovídají zvenčí s platným certifikátem a web hlásí, z jakého commitu je postavený — dá se tedy ověřit, že běží právě to, co je v gitu. Dohled hlásí poruchy e-mailem a má denní zkoušku, jestli ten kanál vůbec funguje; zavedl jsem ji po tom, co alerty tři dny tiše nechodily kvůli propadlému heslu.",
+        text: "Platforma běží od září 2026. Web i jeho API odpovídají zvenčí s platným certifikátem a web hlásí, z jakého commitu je postavený — dá se tedy ověřit, že běží právě to, co je v gitu. Dohled hlásí poruchy e-mailem a denně zkouší, jestli se k odesílacímu serveru přihlásí; zavedl jsem to po tom, co alerty tři dny tiše nechodily kvůli propadlému heslu. Že zpráva dojde, tím ověřené není — zkouší se přihlášení, neodesílá se nic.",
       },
       {
         nadpis: "Zálohy se ověřují obnovou.",
-        text: "Nestačí mi, že dump vznikl — log hlásil „záloha ok“ každou noc i v době, kdy v ní chyběla polovina potřebných věcí. Ověření je dnes jeden příkaz: rozšifruje zálohu tajemství a porovná ji s tím, co na serveru doopravdy leží, a obnoví všechny databáze do dočasného Postgresu vedle ostrých, kde srovná počty tabulek. Takhle mám za sebou dvě části ze tří; třetí — rozběhnutí na úplně novém stroji — zbývá. Píšu to takhle přesně schválně: ověřené je, že tajemství i databáze se **načtou**. Že by po havárii naběhla celá platforma, ověřené není, a dokud neproběhne třetí část, tvrdit to nebudu.",
+        text: "Nestačí mi, že dump vznikl — log hlásil „záloha ok“ každou noc i v době, kdy v ní chyběla polovina potřebných věcí. Ověření je dnes jeden příkaz: rozšifruje zálohu tajemství a porovná ji s tím, co na serveru doopravdy leží, a obnoví všechny databáze do dočasného Postgresu vedle ostrých, kde srovná počty tabulek. Takhle mám za sebou tři části ze čtyř; čtvrtá — rozběhnutí na úplně novém stroji — zbývá. Píšu to takhle přesně schválně: ověřené je, že tajemství i databáze se **načtou**. Že by po havárii naběhla celá platforma, ověřené není, a dokud ta část neproběhne, tvrdit to nebudu.",
       },
       {
         nadpis: "Rozhodnutí mají napsaný důvod a spoušť.",
         text: "U každé architektonické volby je zapsané, proč padla a za jakých okolností ji přehodnotit. Bez toho se k rozhodnutí za rok nevrátíš, jen ho obejdeš.",
       },
       {
-        nadpis: "Padesát zapsaných poučení z provozu — a dvě z nich neměla žádný příznak.",
+        nadpis: "Zapsaná poučení z provozu — a dvě z nich neměla žádný příznak.",
         text: "Souhrn nic neřekne, takže tři konkrétní, u kterých mám zapsaný příznak, příčinu i opravu: *(a)* zdravotní kontrola s krátkým timeoutem měnila přetížení ve výpadek — web odpovídal pomalu, ale správně, a dohled přitom dostal 503; *(b)* záloha hlásila „ok“ a přitom v ní chyběl přihlašovací token jedné služby, konfigurace a tajemství aplikací — našel to nácvik obnovy, ne log; *(c)* skript na zakládání nového projektu potichu přepsal vlastníka tajemství jiné, běžící aplikaci — ta by to poznala až při restartu.",
       },
     ],
@@ -81,7 +81,7 @@ export const cs: Obsah = {
         odstavce: [
           "Server, na kterém běží moje hobby projekty. Jeden stroj, provozní náklady v jednotkách eur měsíčně, a celá definice v gitu.",
           "Co na něm je: Traefik jako vstupní bod s automatickými certifikáty, PostgreSQL, Seq na logy, Uptime Kuma na dohled, přehled stavu, který se přepisuje z cronu, noční zálohy šifrované a odkládané mimo stroj, a skripty, kterými se zakládá nový projekt tak, aby si nešlápl na ostatní.",
-          "Co je na tom zajímavější než výčet: je to napsané tak, aby se to dalo odstěhovat. A aby se po havárii dalo obnovit — což zkouším obnovou, ne důvěrou.",
+          "Co je na tom zajímavější než výčet: je to napsané tak, aby se to dalo odstěhovat. A aby se po havárii dalo obnovit — což jsem zkoušel obnovou, ne důvěrou.",
           "*Soukromý repozitář. Rád ho ukážu.*",
         ],
       },
@@ -143,7 +143,7 @@ export const cs: Obsah = {
       {
         nadpis: "Produkci nejde vrátit do minulosti.",
         odstavce: [
-          "Nasazovací postup kontroluje, že nasazovaná verze skutečně navazuje na tu běžící, a jinak nasazení odmítne. Vzniklo to z obavy, která se dala předvídat, ne z havárie.",
+          "Nasazovací postup odmítne verzi, která je předkem té běžící — starý build tak nepřepíše produkci. Rozbíhavou větev ta kontrola nezachytí, a tak to píšu: brání návratu do minulosti, ne každému omylu. Vzniklo to z obavy, která se dala předvídat, ne z havárie.",
         ],
       },
     ],
@@ -167,10 +167,20 @@ export const cs: Obsah = {
   kontakt: {
     nadpis: "Kontakt",
     mesto: "Příbram",
-    // Adresa je rozdělená schválně: v HTML se celá neobjeví a mailto se
-    // skládá až při kliknutí. Vyplněno 9. 10. 2026 podle kontaktu
-    // v Filipově vlastním CV, které poslal jako podklad pro tuhle stránku.
-    // Změna je jedna řádka tady a jedna v en.ts.
+    // POZOR: rozdělení na části adresu NESKRÝVÁ. `Kontakt` je klientská
+    // komponenta, takže Next tyhle hodnoty i `nahrada` serializuje do
+    // RSC payloadu ve stránce — celá adresa je ve zdroji stránky bez
+    // ohledu na to, jak je tady zapsaná. Dřívější komentář tvrdil opak;
+    // ověřeno nad nasazeným webem 12. 11. 2026.
+    //
+    // Jediné účinné opatření je alias oddělený od Google účtu. Změna je
+    // jedna řádka tady a jedna v en.ts.
+    //
+    // `web/kontrola-adresy.sh` to hlídá nad postaveným výstupem a nad
+    // touhle adresou selže (ověřeno 13. 11. 2026, osm souborů ve `out/`).
+    // Do Dockerfile se zapojí **spolu s aliasem** — zapojit ji dřív
+    // znamená shodit build, aniž by to cokoli ochránilo: adresa už
+    // zveřejněná je.
     mail: { uzivatel: "filipburda75", domena: "gmail.com" },
     nahrada: "filipburda75 [zavináč] gmail.com",
   },

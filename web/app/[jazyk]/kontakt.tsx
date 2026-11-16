@@ -3,13 +3,22 @@
 import { useState } from "react";
 
 /**
- * Obfuskovaný e-mail. **Celá adresa v HTML není** — jsou tam jen dvě části
- * a skládá se až po kliknutí. Bez JavaScriptu zůstane čitelná náhrada,
- * kterou jde ručně zkopírovat.
+ * E-mail. **Celá adresa ve zdroji stránky JE** — tenhle komentář dřív
+ * tvrdil opak a byla to nepravda. Komponenta je `"use client"`, takže Next
+ * musí `uzivatel`, `domena` i `nahrada` serializovat do RSC payloadu, aby
+ * sedla hydratace; `nahrada` navíc nese adresu v čitelné podobě. Ověřeno
+ * nad nasazeným webem 12. 11. 2026: adresa je ve vydaném HTML a v payloadu
+ * té stránky třikrát.
  *
- * Nikoho rozhodného to nezastaví a taková ambice to nemá; jde o to odstínit
- * hromadné sběrače. Telefon na stránce není (rozhodnuto 8. 10. 2026) —
- * přidat ho jde kdykoli, odebrat zveřejněné číslo z cizích seznamů ne.
+ * Rozdělení na části tedy nic neskrývá a sběrače neodstíní. Při rámci
+ * „jen e-mail“ a „žádná běhová závislost“ je cíl „adresa není v HTML“
+ * nedosažitelný — jediné účinné opatření je **alias oddělený od Google
+ * účtu**, aby zveřejněná adresa nebyla identitou osobního účtu.
+ *
+ * Co tenhle soubor opravdu řeší: obsluhu klávesnicí (je to `<button>`),
+ * čitelnou podobu bez JavaScriptu a jeden klik místo `mailto:` ve zdroji.
+ * Telefon na stránce není (rozhodnuto 8. 10. 2026) — přidat ho jde
+ * kdykoli, odebrat zveřejněné číslo z cizích seznamů ne.
  */
 export function Kontakt({
   uzivatel,

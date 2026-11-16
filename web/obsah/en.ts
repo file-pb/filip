@@ -20,14 +20,14 @@ export const en: Obsah = {
     ".NET and C# developer. Programming professionally since 2000, mostly on financial systems.",
   uvod: [
     "I had hardware and programming side by side from the start: I trained at the secondary technical school in Písek, in electronic and telecommunications equipment and computer-logic programming. I started out on intruder and fire alarm systems and CCTV, so zones, alarm states, false alarms and power budgets aren’t abstractions to me.",
-    "In my own time I build and run a small platform for hobby projects. What runs on it isn’t a demo: a public website with monitoring, backups I verify by restoring them, and written-up lessons from faults I actually hit.",
+    "In my own time I build and run a small platform for hobby projects. What runs on it isn’t a demo: a public website with monitoring, backups I have tested by restoring them, and written-up lessons from faults I actually hit.",
   ],
 
   cimSeZabyvam: {
     nadpis: "What I do",
     odstavce: [
-      "I’ve been programming professionally **since 2000**. The path wasn’t straight, which is the useful part: I started on business and communications systems, came to team leadership by way of an ERP product, then spent several years on contract, ran my own company as its managing director and CTO from 2013 to 2017, and since 2021 I’ve been back in employment working on financial systems.",
-      "**I’ve led a team, fifteen people at its largest** — two years in a Scrum master role, four as CTO of my own company. Fifteen is the largest team I led, not the size under both roles. That period also covers the work for **Škoda-Auto**: Azure architecture for single sign-on, and a module that pairs user and browser profiles across its components.",
+      "I’ve been programming professionally **since 2000**. The path wasn’t straight, which is the useful part: I started on business and communications systems, came to team leadership by way of an ERP product, then spent several years on contract, later ran my own company as its CTO, and since 2021 I’ve been back in employment working on financial systems.",
+      "**I’ve led a team, fifteen people at its largest** — two years in a Scrum master role, four as CTO of my own company. Fifteen is the largest team I led, not the size under both roles. That period also covers the work for **Škoda Auto**: Azure architecture for single sign-on.",
       "Alongside that, since September 2026, I’ve been building my own platform — somewhere to try the things I don’t get to otherwise.",
       "**The code on my own projects is written with AI. My job is the brief, the critical review, the decisions and the operations.** I put it that bluntly because it’s the point: the value isn’t in how many lines I typed. It’s that these systems run, that their backups are verified, and that I know where their weak spots are — including the ones still unverified.",
     ],
@@ -35,18 +35,18 @@ export const en: Obsah = {
     doklady: [
       {
         nadpis: "In service, not on a laptop.",
-        text: "The platform has been running since September 2026. The site and its API answer from the outside with a valid certificate, and the site reports the commit it was built from — so you can check that what’s running is what’s in git. Monitoring reports faults by e-mail and tests daily whether that channel works at all. I added that test after alerts went quietly undelivered for three days because a password had expired.",
+        text: "The platform has been running since September 2026. The site and its API answer from the outside with a valid certificate, and the site reports the commit it was built from — so you can check that what’s running is what’s in git. Monitoring reports faults by e-mail and tests daily that it can sign in to the outgoing mail server. I added that test after alerts went quietly undelivered for three days because a password had expired. That a message actually arrives is not what it verifies — it signs in and sends nothing.",
       },
       {
         nadpis: "Backups are verified by restoring them.",
-        text: "A dump existing isn’t enough — the log reported “backup ok” every night during a period when half of what I needed was missing from it. Verification is now one command: it decrypts the secrets backup and diffs it against what’s actually on the server, then restores every database into a throwaway Postgres beside the live one and compares table counts. That’s two of the drill’s three parts done; the third — bringing everything up on a brand-new machine — is still ahead of me. I’m deliberately precise here: what’s verified is that secrets and databases **load**. That the whole platform would come back up after a disaster is not verified, and I won’t claim it until that third part runs.",
+        text: "A dump existing isn’t enough — the log reported “backup ok” every night during a period when half of what I needed was missing from it. Verification is now one command: it decrypts the secrets backup and diffs it against what’s actually on the server, then restores every database into a throwaway Postgres beside the live one and compares table counts. That’s three of the drill’s four parts done; the fourth — bringing everything up on a brand-new machine — is still ahead of me. I’m deliberately precise here: what’s verified is that secrets and databases **load**. That the whole platform would come back up after a disaster is not verified, and I won’t claim it until that part runs.",
       },
       {
         nadpis: "Decisions carry a reason and a trigger.",
         text: "Every architectural choice is written down with why it was made and what would make me revisit it. Without the trigger you don’t return to a decision a year later — you just work around it.",
       },
       {
-        nadpis: "Fifty written-up lessons from operations — and two of them had no symptom.",
+        nadpis: "Written-up lessons from operations — and two of them had no symptom.",
         text: "A count tells you nothing, so three specifics, each with a recorded symptom, cause and fix: *(a)* a health check with a short timeout turned overload into an outage — the site was answering slowly but correctly, while monitoring got a 503; *(b)* a backup reported “ok” while missing one service’s sign-in token, its configuration and the applications’ secrets — the restore drill found it, the log never did; *(c)* a project-creation script silently took ownership of a running application’s secrets, which that application would only have discovered on its next restart.",
       },
     ],
@@ -84,7 +84,7 @@ export const en: Obsah = {
           "*The name is Czech for “the toy room”, which is roughly the brief.*",
           "One server running my hobby projects, with operating costs in the low single digits of euros a month and the whole definition in git.",
           "On it: Traefik as the entry point with automatic certificates, PostgreSQL, Seq for logs, Uptime Kuma for monitoring, a status overview rewritten from cron, nightly backups encrypted and shipped off the machine, and scripts that create a new project without letting it tread on the others.",
-          "The interesting part isn’t the list. It’s that the whole thing is written to be moved — and to be brought back after a failure, which I check by restoring, not by trusting.",
+          "The interesting part isn’t the list. It’s that the whole thing is written to be moved — and to be brought back after a failure, which I checked by restoring, not by trusting.",
           "*Private repository. Happy to walk through it.*",
         ],
       },
@@ -146,7 +146,7 @@ export const en: Obsah = {
       {
         nadpis: "Production doesn’t go backwards.",
         odstavce: [
-          "The deployment process checks that the version being deployed actually descends from the one already running, and refuses the deployment otherwise. It came out of a foreseeable worry rather than an incident.",
+          "The deployment process refuses a version that is an ancestor of the one already running, so an old build cannot overwrite production. A diverged branch is not caught by that check, and I say so: it guards against going backwards, not against every mistake. It came out of a foreseeable worry rather than an incident.",
         ],
       },
     ],
